@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 配置事务 -->
+	<!--Spring启动加载所有spring的配置文件都能自动找到  -->
+	<!--配置事务管理器  -->
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="tx">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- 配置aop切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(* com.jaclon..ssm.service.*.*(..))" id="myPoint"/>
+		<aop:advisor advice-ref="myAdvice" pointcut-ref="myPoint"/>
+	</aop:config>
+	<!-- 事务属性 -->
+	<tx:advice transaction-manager="tx" id="myAdvice">
+		<tx:attributes>
+			<tx:method name="*"/>
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- 配置基于注解的声明式事务 -->
+	<!--<tx:annotation-driven transaction-manager="tx" />-->
+</beans>
