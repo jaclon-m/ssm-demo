@@ -33,3 +33,4 @@
 ## TODO
 
 1. mybatis genetor
+2. jsp list?thymeleaf?
